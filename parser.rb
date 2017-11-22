@@ -10,9 +10,16 @@ write {a a}
 
 =end
 
+
 class ExpressionParser
-  def initialize(expression)
-    @tokens = expression.scan /[{}]|\w+|".*?"|'.*?'/
+
+  def initialize(filename)
+          data = ''
+          f = File.open(filename, "r")
+          f.each_line do |line|
+              data += line
+        end
+        @tokens = data.scan /[{}]|\w+|".*?"|'.*?'/
   end
 
   def peek
@@ -22,23 +29,36 @@ class ExpressionParser
   def next_token
     @tokens.shift
   end
+  
+  def findFreq(s)
+      h = {"c4" => 261.6, "d4" => 293.665, "e4" => 329.628, "f4" =>349.228, "g4" =>392.00, "a4" =>440}
+      h[s]
+    end
 
   def parse
-    if (token = next_token) == '('
+    if (token = next_token) == '{'
       parse_list
     elsif token =~ /['"].*/
       token[1..-2]
+    elsif token =~ /\w\d/
+          findFreq(token.to_str)
     elsif token =~ /\d+/
-      token.to_i
-    else
+          token.to_f * 0.25
+       else
       token.to_sym
     end
   end
-
+  
   def parse_list
-    list = []
-    list << parse until peek == ')'
+      list = []
+    list << parse until peek == '}'
     next_token
     list
-  end
+    parsed = []
+    list.each do |(a,b)|
+        puts "#{a} #{b}"
+    end
+    list
+    end
 end
+  
