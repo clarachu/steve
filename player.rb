@@ -7,7 +7,7 @@ class Player
     end
 
     def play(list)
-       melody = list.map { |n| MusicTheory::Note.new(frequency: n[0], duration n[1]) }
+       melody = list.map { |n| MusicTheory::Note.new(frequency: n[0], duration: n[1]) }
        MusicTheory::Play.new melody
     end
 
