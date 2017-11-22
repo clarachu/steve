@@ -9,8 +9,7 @@ let a [{{c4 1} {c4 1}  {dynamic piano} {g4 1} {g4 1}}
 write {a a}
 
 =end
-
-
+require 'player'
 class ExpressionParser
 
   def initialize(filename)
@@ -37,7 +36,7 @@ class ExpressionParser
 
   def parse
     if (token = next_token) == '{'
-      parse_list
+      :play parse_list
     elsif token =~ /['"].*/
       token[1..-2]
     elsif token =~ /\w\d/
